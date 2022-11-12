@@ -2,8 +2,52 @@ console.log("Events API")
 
 const url = "https://xp41-soundgarden-api.herokuapp.com/events"
 
+const title = document.title
 
-//Exibir próximos eventos
+
+//Exibir todos os eventos
+const getEvents = async() => {
+    const response = await fetch(url)
+
+    const events = await response.json()
+
+    console.log(events)
+
+    
+
+    let todosEvents = document.querySelector("#todosEventos")
+    events.map((event)=>{
+        console.log(event)
+
+        let article = document.createElement("article")
+        let h2 = document.createElement("h2")
+        let h4 = document.createElement("h4")
+        let p = document.createElement("p")
+        let link = document.createElement("a")
+
+        let date = new Date(event.scheduled)
+        
+
+        h2.innerText=event.name +' - '+date.getDay() + '/'+ date.getMonth()+'/'+ date.getYear()
+        event.attractions.map(atraction => h4.innerText += atraction + ' ')
+        p.innerText=event.description
+        link.innerText="reservar agora"
+        link.setAttribute("herf", `#`)
+        
+        
+        article.classList.add("evento", "card", "p-5", "m-3")
+        link.classList.add("btn", "btn-primary")
+
+        todosEvents.appendChild(article)
+        article.appendChild(h2)
+        article.appendChild(h4)
+        article.appendChild(p)
+        article.appendChild(link)
+
+    })
+    
+}
+
 const proxEvents = async() => {
     const response = await fetch(url)
 
@@ -52,7 +96,7 @@ const proxEvents = async() => {
     let link = document.createElement("a")
     div2.classList.add("container", "text-center")
     link.classList.add("btn", "btn-secondary")
-    link.setAttribute("herf", `eventos.html`)
+    link.setAttribute("href", `eventos.html`)
     link.innerText="ver todos os eventos"
 
     proxEvents.appendChild(div2)
@@ -62,7 +106,11 @@ const proxEvents = async() => {
 }
 
 
+if(title==`Sound Garden`){
+    proxEvents()
+}else{
+    getEvents()
+}
 
-proxEvents()
 
 
