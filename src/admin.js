@@ -5,6 +5,9 @@ const url = "https://xp41-soundgarden-api.herokuapp.com/events"
 
 const urlSearchParams = new URLSearchParams(window.location.search)
 const postId = urlSearchParams.get(`id`)
+const funcId = urlSearchParams.get(`func`)
+const path = window.location.pathname
+console.log(path)
 
 
 //GET all elements
@@ -41,11 +44,11 @@ const getEvents = async() => {
         link1.setAttribute("href", `resevas.html`)
         link1.innerText="ver reservas"
         link2.classList.add("btn","btn-secondary")
-        link2.setAttribute("href", `/editar-evento.html?id=${event._id}`)
+        link2.setAttribute("href", `/editar-evento.html?id=${event._id}&func=edit`)
         link2.innerText="editar"
         link3.classList.add("btn","btn-danger")
         link3.setAttribute("id", `${event._id}`)
-        link3.setAttribute("onCLick", `deleteEvent(this.id)`)
+        link3.setAttribute("href", `/excluir-evento.html?id=${event._id}&func=delete`)
         link3.innerText="excluir"
 
         tr.appendChild(th)
@@ -87,99 +90,245 @@ const editEvent = async(event,id) => {
 }
 
 const deleteEvent = async(id) => {
-    const tr =document.getElementById(id).parentElement.parentElement
     const response = await fetch(`${url}/${id}`,{
         method:"DELETE",
         headers:{
             "Content-type":"application/json"
         }
     })
-    tr.remove()
+}
+
+const postEvent = async(event) => {
+    const response = await fetch(`${url}`,{
+        method:"POST",
+        body:event,
+        headers:{
+            "Content-type":"application/json"
+        }
+    })
+
+    const data = await response.json()  
+    console.log(data)  
 }
 
 
 
 
 
-
-if(!postId){
+if(!postId && path==`/admin.html`){
     getEvents()
-}else{
-    const edit = async() => {
-    const event = await getEvent(postId)
-    console.log(event)
+}else if(path === `/cadastro-evento.html`) {
+    console.log('aqui')
+    const cadastrar = async() => {
+        const eventForm = document.querySelector(`#novo-evento-form`)
+        const nome = document.querySelector(`#nome`)
+        const atracoes = document.querySelector(`#atracoes`)
+        const descricao = document.querySelector(`#descricao`)
+        const data = document.querySelector(`#data`)
+        const lotacao = document.querySelector(`#lotacao`)
 
-    const eventForm = document.querySelector("#edit-event")
-
-    const nome = document.querySelector(`#nome`)
-    const banner =document.querySelector(`#banner`)
-    const atracoes = document.querySelector(`#atracoes`)
-    const descricao = document.querySelector(`#descricao`)
-    const data = document.querySelector(`#data`)
-    const lotacao = document.querySelector(`#lotacao`)
-
-    nome.value=event.name
-    banner.value = event.poster
-    event.attractions.map(atraction => atracoes.value += atraction + ', ')
-    descricao.value=event.description
-    let date = new Date(event.scheduled)
-    data.value=date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()+' '+date.getHours()+`:`+date.getMinutes()
-    lotacao.value=event.number_tickets
-
-    eventForm.addEventListener(`submit`,async(e)=>{
-        e.preventDefault()
-
-        let date = data.value
-
-        const dateValues = date.length>10?
-            date.split(' ')[0]:
-            date
-        const timeValues = date.length>10?
-            date.split(' ')[1]:
-            '22:00'
-
-        const [month, day, year] = dateValues.split('/');
-        const [hours, minutes] = timeValues.split(':');
-        const dateScheduled = new Date(year, month - 1, day, hours, minutes);
-        console.log(dateScheduled)
-
-        let editedEvent = {
-            name:nome.value,
-            attractions:[atracoes.value],
-            description:descricao.value,
-            scheduled: dateScheduled,
-            number_tickets:lotacao.value,
-            poster:banner.value
-        }
-    
-        editedEvent = JSON.stringify(editedEvent)
-        console.log(editedEvent)
-    
-        await editEvent(editedEvent,postId)
-
-        const main = document.getElementsByTagName("main")[0]
-        const div = main.getElementsByTagName("div")[1]
-
-        const newDiv = document.createElement("div")
-        newDiv.classList.add("alert", "alert-success")
-        newDiv.setAttribute("role","alert")
-        newDiv.innerText=`Sucesso ao editar evento`
-
-        div.insertBefore(newDiv,div.firstChild)
-        nome.value=''
-        atracoes.value=''
-        descricao.value=''
-        banner.value=''
-        data.value='00/00/00 00:00'
-        lotacao.value=''
-
-        setTimeout(() => {
-            newDiv.remove()
+        eventForm.addEventListener(`submit`,async(e)=>{
+            e.preventDefault()
+        
+            let date = data.value
+            const dateValues = date.length>10?
+                date.split(' ')[0]:
+                date
+            const timeValues = date.length>10?
+                date.split(' ')[1]:
+                '22:00'
+        
+            const [month, day, year] = dateValues.split('/');
+            const [hours, minutes] = timeValues.split(':');
+            const dateScheduled = new Date(year, month - 1, day, hours, minutes);
+            let newEvent = {
+                name:nome.value,
+                attractions:[atracoes.value],
+                description:descricao.value,
+                scheduled: dateScheduled,
+                number_tickets:lotacao.value,
+                poster:"link da imagem"
+            }
+        
+            newEvent = JSON.stringify(newEvent)
+        
+            await postEvent(newEvent)
+        
+            const main = document.getElementsByTagName("main")[0]
+            const div = main.getElementsByTagName("div")[1]
+        
+            const newDiv = document.createElement("div")
+            newDiv.classList.add("alert", "alert-success")
+            newDiv.setAttribute("role","alert")
+            newDiv.innerText=`Sucesso ao criar evento`
+        
+            div.insertBefore(newDiv,div.firstChild)
+            nome.value=''
+            atracoes.value=''
+            descricao.value=''
+            data.value='00/00/00 00:00'
+            lotacao.value=''
+        
+            setTimeout(() => {
+                newDiv.remove()
+                
+            },5000)
             
-        },5000)
-    })
+        })
+    }
+    cadastrar()
+}else if (postId && funcId===`edit`){
+    const edit = async() => {
+        const event = await getEvent(postId)
+        console.log(event)
+
+        const eventForm = document.querySelector("#edit-event")
+
+        const nome = document.querySelector(`#nome`)
+        const banner =document.querySelector(`#banner`)
+        const atracoes = document.querySelector(`#atracoes`)
+        const descricao = document.querySelector(`#descricao`)
+        const data = document.querySelector(`#data`)
+        const lotacao = document.querySelector(`#lotacao`)
+
+        nome.value=event.name
+        banner.value = event.poster
+        event.attractions.map(atraction => atracoes.value += atraction + ', ')
+        descricao.value=event.description
+        let date = new Date(event.scheduled)
+        data.value=date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()+' '+date.getHours()+`:`+date.getMinutes()
+        lotacao.value=event.number_tickets
+
+        eventForm.addEventListener(`submit`,async(e)=>{
+            e.preventDefault()
+
+            let date = data.value
+
+            const dateValues = date.length>10?
+                date.split(' ')[0]:
+                date
+            const timeValues = date.length>10?
+                date.split(' ')[1]:
+                '22:00'
+
+            const [month, day, year] = dateValues.split('/');
+            const [hours, minutes] = timeValues.split(':');
+            const dateScheduled = new Date(year, month - 1, day, hours, minutes);
+            console.log(dateScheduled)
+
+            let editedEvent = {
+                name:nome.value,
+                attractions:[atracoes.value],
+                description:descricao.value,
+                scheduled: dateScheduled,
+                number_tickets:lotacao.value,
+                poster:banner.value
+            }
+        
+            editedEvent = JSON.stringify(editedEvent)
+            console.log(editedEvent)
+        
+            await editEvent(editedEvent,postId)
+
+            const main = document.getElementsByTagName("main")[0]
+            const div = main.getElementsByTagName("div")[1]
+
+            const newDiv = document.createElement("div")
+            newDiv.classList.add("alert", "alert-success")
+            newDiv.setAttribute("role","alert")
+            newDiv.innerText=`Sucesso ao editar evento`
+
+            div.insertBefore(newDiv,div.firstChild)
+            nome.value=''
+            atracoes.value=''
+            descricao.value=''
+            banner.value=''
+            data.value='00/00/00 00:00'
+            lotacao.value=''
+
+            setTimeout(() => {
+                newDiv.remove()
+                
+            },5000)
+        })
     }
     edit()
+}else if (postId && funcId===`delete`){
+    const del = async() => {
+        const event = await getEvent(postId)
+        console.log(event)
+    
+        const eventForm = document.querySelector("#delete-event")
+    
+        const nome = document.querySelector(`#nome`)
+        const banner =document.querySelector(`#banner`)
+        const atracoes = document.querySelector(`#atracoes`)
+        const descricao = document.querySelector(`#descricao`)
+        const data = document.querySelector(`#data`)
+        const lotacao = document.querySelector(`#lotacao`)
+    
+        nome.value=event.name
+        banner.value = event.poster
+        event.attractions.map(atraction => atracoes.value += atraction + ', ')
+        descricao.value=event.description
+        let date = new Date(event.scheduled)
+        data.value=date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()+' '+date.getHours()+`:`+date.getMinutes()
+        lotacao.value=event.number_tickets
+    
+        eventForm.addEventListener(`submit`,async(e)=>{
+            e.preventDefault()
+    
+            let date = data.value
+    
+            const dateValues = date.length>10?
+                date.split(' ')[0]:
+                date
+            const timeValues = date.length>10?
+                date.split(' ')[1]:
+                '22:00'
+    
+            const [month, day, year] = dateValues.split('/');
+            const [hours, minutes] = timeValues.split(':');
+            const dateScheduled = new Date(year, month - 1, day, hours, minutes);
+            console.log(dateScheduled)
+    
+            let editedEvent = {
+                name:nome.value,
+                attractions:[atracoes.value],
+                description:descricao.value,
+                scheduled: dateScheduled,
+                number_tickets:lotacao.value,
+                poster:banner.value
+            }
+        
+            editedEvent = JSON.stringify(editedEvent)
+            console.log(editedEvent)
+        
+            await deleteEvent(postId)
+    
+            const main = document.getElementsByTagName("main")[0]
+            const div = main.getElementsByTagName("div")[1]
+    
+            const newDiv = document.createElement("div")
+            newDiv.classList.add("alert", "alert-success")
+            newDiv.setAttribute("role","alert")
+            newDiv.innerText=`Sucesso ao deletar o evento`
+    
+            div.insertBefore(newDiv,div.firstChild)
+            nome.value=''
+            atracoes.value=''
+            descricao.value=''
+            banner.value=''
+            data.value='00/00/00 00:00'
+            lotacao.value=''
+    
+            setTimeout(() => {
+                newDiv.remove()
+                
+            },5000)
+        })
+        }
+        del()
 }
 
 

@@ -91,6 +91,15 @@ const proxEvents = async() => {
         article.appendChild(p)
         article.appendChild(link)
 
+        let img = document.querySelector(`#car-img-${i}`)
+        if(event.poster.includes(`http`)){
+            img.setAttribute('src',event.poster)
+        }
+        let h5 =document.querySelector(`#car-h5-name-${i}`)
+        h5.innerText=event.name
+        let pCar = document.querySelector(`#car-p-desc-${i}`)
+        pCar.innerText=event.description
+
     }
     let div2 = document.createElement("div")
     let link = document.createElement("a")
