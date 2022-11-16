@@ -1,18 +1,16 @@
-console.log("Events API")
-
-const url = "https://xp41-soundgarden-api.herokuapp.com/events"
+const urlEvent = "https://xp41-soundgarden-api.herokuapp.com/events"
+const urlBooking= "https://xp41-soundgarden-api.herokuapp.com/bookings"
 
 
 const urlSearchParams = new URLSearchParams(window.location.search)
 const postId = urlSearchParams.get(`id`)
 const funcId = urlSearchParams.get(`func`)
 const path = window.location.pathname
-console.log(path)
 
 
 //GET all elements
 const getEvents = async() => {
-    const response = await fetch(url)
+    const response = await fetch(urlEvent)
 
     const events = await response.json()    
 
@@ -40,8 +38,12 @@ const getEvents = async() => {
         td2.innerText=event.name
         event.attractions.map(atraction => td3.innerText += atraction + ' ')
         
-        link1.classList.add("btn","btn-dark")
-        link1.setAttribute("href", `resevas.html`)
+        link1.classList.add("btn","btn-dark","abrir")
+        link1.setAttribute("id", `reserva-${event._id}`)
+        link1.setAttribute("data-toggle",`modal`)
+        link1.setAttribute(`data-target`, `#reservaModal`)
+        link1.setAttribute(`href`,`/reservas.html?id=${event._id}&func=res`)
+        link1.setAttribute(`type`,`button`)
         link1.innerText="ver reservas"
         link2.classList.add("btn","btn-secondary")
         link2.setAttribute("href", `/editar-evento.html?id=${event._id}&func=edit`)
@@ -69,15 +71,63 @@ const getEvents = async() => {
 
 }
 
+const getBooking = async(eventId) => {
+    const response = await fetch(`${urlBooking}/event/${eventId}`)
+
+    const bookings = await response.json()
+
+    let header = document.querySelector(`#reserva`)
+    header.innerText=`Gerenciamento de reservas - ${bookings[0].event.name}`
+    let tabelaEvents = document.querySelector("#tabela-reservas")
+    
+    bookings.map((book,index)=> {
+
+        let tr = document.createElement("tr")
+        let th = document.createElement("th")
+        let td1 = document.createElement("td")
+        let td2 = document.createElement("td")
+        let td3 = document.createElement("td")
+        let td4 = document.createElement("td")
+        let link3 = document.createElement("a")
+
+        
+
+        th.setAttribute("scope", `row`)
+        th.innerText=index+1
+
+        td1.innerText=book.owner_name
+        td2.innerText=book.owner_email
+        td3.innerText=book.number_tickets
+        
+        link3.classList.add("btn","btn-danger")
+        link3.setAttribute("id", `${book._id}`)
+        link3.setAttribute("onclick", `deleteBooking(this.id)`)
+        link3.innerText="excluir"
+
+        tr.appendChild(th)
+        tr.appendChild(td1)
+        tr.appendChild(td2)
+        tr.appendChild(td3)
+               
+        td4.appendChild(link3)
+        
+        tr.appendChild(td4)
+
+        tabelaEvents.appendChild(tr)
+
+    })
+
+
+}
+
 const getEvent = async(id) => {
-    const response = await fetch(`${url}/${id}`);
+    const response = await fetch(`${urlEvent}/${id}`);
     const event = await response.json();
     return await event
 }
 
 const editEvent = async(event,id) => {
-    console.log(event)
-    const response = await fetch(`${url}/${id}`,{
+    const response = await fetch(`${urlEvent}/${id}`,{
         method:"PUT",
         body:event,
         headers:{
@@ -86,11 +136,10 @@ const editEvent = async(event,id) => {
     })
 
     const data = await response.json()
-    console.log(data)
 }
 
 const deleteEvent = async(id) => {
-    const response = await fetch(`${url}/${id}`,{
+    const response = await fetch(`${urlEvent}/${id}`,{
         method:"DELETE",
         headers:{
             "Content-type":"application/json"
@@ -99,7 +148,7 @@ const deleteEvent = async(id) => {
 }
 
 const postEvent = async(event) => {
-    const response = await fetch(`${url}`,{
+    const response = await fetch(`${urlEvent}`,{
         method:"POST",
         body:event,
         headers:{
@@ -108,9 +157,18 @@ const postEvent = async(event) => {
     })
 
     const data = await response.json()  
-    console.log(data)  
 }
 
+const deleteBooking = async(id) => {
+    const tr = document.getElementById(`${id}`).parentNode.parentNode
+    tr.remove()
+    const response = await fetch(`${urlBooking}/${id}`,{
+        method:"DELETE",
+        headers:{
+            "Content-type":"application/json"
+        }
+    })
+}
 
 
 
@@ -118,7 +176,6 @@ const postEvent = async(event) => {
 if(!postId && path==`/admin.html`){
     getEvents()
 }else if(path === `/cadastro-evento.html`) {
-    console.log('aqui')
     const cadastrar = async() => {
         const eventForm = document.querySelector(`#novo-evento-form`)
         const nome = document.querySelector(`#nome`)
@@ -177,10 +234,12 @@ if(!postId && path==`/admin.html`){
         })
     }
     cadastrar()
+}else if (postId && funcId===`res`){
+    getBooking(postId)
 }else if (postId && funcId===`edit`){
     const edit = async() => {
         const event = await getEvent(postId)
-        console.log(event)
+
 
         const eventForm = document.querySelector("#edit-event")
 
@@ -214,7 +273,6 @@ if(!postId && path==`/admin.html`){
             const [month, day, year] = dateValues.split('/');
             const [hours, minutes] = timeValues.split(':');
             const dateScheduled = new Date(year, month - 1, day, hours, minutes);
-            console.log(dateScheduled)
 
             let editedEvent = {
                 name:nome.value,
@@ -226,7 +284,6 @@ if(!postId && path==`/admin.html`){
             }
         
             editedEvent = JSON.stringify(editedEvent)
-            console.log(editedEvent)
         
             await editEvent(editedEvent,postId)
 
@@ -256,7 +313,6 @@ if(!postId && path==`/admin.html`){
 }else if (postId && funcId===`delete`){
     const del = async() => {
         const event = await getEvent(postId)
-        console.log(event)
     
         const eventForm = document.querySelector("#delete-event")
     
@@ -290,7 +346,6 @@ if(!postId && path==`/admin.html`){
             const [month, day, year] = dateValues.split('/');
             const [hours, minutes] = timeValues.split(':');
             const dateScheduled = new Date(year, month - 1, day, hours, minutes);
-            console.log(dateScheduled)
     
             let editedEvent = {
                 name:nome.value,
@@ -302,7 +357,6 @@ if(!postId && path==`/admin.html`){
             }
         
             editedEvent = JSON.stringify(editedEvent)
-            console.log(editedEvent)
         
             await deleteEvent(postId)
     

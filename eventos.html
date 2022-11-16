@@ -19,6 +19,34 @@
         </a>
     </header>
     <main>
+        <div class="modal fade" id="reservaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Dados para a reserva</h5>
+                  <button type="button" class="close fechar" data-dismiss="modal" aria-label="Close">
+                    <span class="fechar" aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form id="modalForm">
+                    <div class="form-group">
+                      <label for="reserva-name" class="col-form-label">Nome:</label>
+                      <input type="text" class="form-control" id="reserva-name">
+                    </div>
+                    <div class="form-group">
+                      <label for="reserva-email" class="col-form-label">Email:</label>
+                      <input type="email" class="form-control" id="reserva-email"></input>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary fechar" data-dismiss="modal">Fechar</button>
+                        <button type="submit"  form="modalForm" class="btn btn-primary enviar">Reservar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
         <section class="full">
             <div class="container text-center">
                 <h2>Todos os Eventos</h2>
