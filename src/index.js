@@ -20,9 +20,10 @@ const getEvents = async() => {
         let link = document.createElement("button")
 
         let date = new Date(event.scheduled)
+        console.log(date)
         
 
-        h2.innerText=event.name +' - '+date.getDay() + '/'+ date.getMonth()+'/'+ date.getYear()
+        h2.innerText=event.name +' - '+date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()
         event.attractions.map(atraction => h4.innerText += atraction + ' ')
         p.innerText=event.description
         link.setAttribute("id", `reserva-${event._id}`)
@@ -63,9 +64,10 @@ const proxEvents = async() => {
         let link = document.createElement("button")
 
         let date = new Date(event.scheduled)
+        console.log(date)
         
 
-        h2.innerText=event.name +' - '+date.getDay() + '/'+ date.getMonth()+'/'+ date.getYear()
+        h2.innerText=event.name +' - '+date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()
         event.attractions.map(atraction => h4.innerText += atraction + ' ')
         p.innerText=event.description
         link.setAttribute("id", `reserva-${event._id}`)

@@ -5,7 +5,7 @@ const urlBooking= "https://xp41-soundgarden-api.herokuapp.com/bookings"
 const urlSearchParams = new URLSearchParams(window.location.search)
 const postId = urlSearchParams.get(`id`)
 const funcId = urlSearchParams.get(`func`)
-const path = window.location.pathname
+const title = document.title
 
 
 //GET all elements
@@ -174,9 +174,9 @@ const deleteBooking = async(id) => {
 
 
 
-if(!postId && path.includes(`/admin.html`)){
+if(!postId && title===`Sound Gardens - Painel Administrativo`){
     getEvents()
-}else if(path.includes(`/cadastro-evento.html`)) {
+}else if(title === 'Sound Gardens - Painel Administrativo - Cadastro') {
     const cadastrar = async() => {
         const eventForm = document.querySelector(`#novo-evento-form`)
         const nome = document.querySelector(`#nome`)
@@ -196,7 +196,7 @@ if(!postId && path.includes(`/admin.html`)){
                 date.split(' ')[1]:
                 '22:00'
         
-            const [month, day, year] = dateValues.split('/');
+            const [day, month, year] = dateValues.split('/');
             const [hours, minutes] = timeValues.split(':');
             const dateScheduled = new Date(year, month - 1, day, hours, minutes);
             let newEvent = {
@@ -271,7 +271,7 @@ if(!postId && path.includes(`/admin.html`)){
                 date.split(' ')[1]:
                 '22:00'
 
-            const [month, day, year] = dateValues.split('/');
+            const [day, month, year] = dateValues.split('/');
             const [hours, minutes] = timeValues.split(':');
             const dateScheduled = new Date(year, month - 1, day, hours, minutes);
 
@@ -344,7 +344,7 @@ if(!postId && path.includes(`/admin.html`)){
                 date.split(' ')[1]:
                 '22:00'
     
-            const [month, day, year] = dateValues.split('/');
+            const [day, month, year] = dateValues.split('/');
             const [hours, minutes] = timeValues.split(':');
             const dateScheduled = new Date(year, month - 1, day, hours, minutes);
     
