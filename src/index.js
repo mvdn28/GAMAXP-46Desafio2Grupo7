@@ -20,7 +20,6 @@ const getEvents = async() => {
         let link = document.createElement("button")
 
         let date = new Date(event.scheduled)
-        console.log(date)
         
 
         h2.innerText=event.name +' - '+date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()
@@ -64,7 +63,6 @@ const proxEvents = async() => {
         let link = document.createElement("button")
 
         let date = new Date(event.scheduled)
-        console.log(date)
         
 
         h2.innerText=event.name +' - '+date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()

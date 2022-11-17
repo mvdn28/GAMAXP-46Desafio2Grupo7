@@ -12,8 +12,7 @@ const title = document.title
 const getEvents = async() => {
     const response = await fetch(urlEvent)
 
-    const events = await response.json()
-    console.log(events)    
+    const events = await response.json()   
 
     let tabelaEvents = document.querySelector("#tabela-eventos")
     
