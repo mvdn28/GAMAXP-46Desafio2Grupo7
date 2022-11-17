@@ -34,7 +34,7 @@ const getEvents = async() => {
         th.innerText=index+1
 
         let date = new Date(event.scheduled)
-        td1.innerText=date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()+' '+date.getHours()+`:`+date.getMinutes()
+        td1.innerText=String(date.getDate()).padStart(2, '0') + '/'+ String(date.getMonth()+1).padStart(2, '0')+'/'+ String(date.getFullYear())+' '+String(date.getHours()).padStart(2, '0')+`:`+String(date.getMinutes()).padStart(2, '0')
         td2.innerText=event.name
         event.attractions.map(atraction => td3.innerText += atraction + ' ')
         
@@ -255,7 +255,7 @@ if(!postId && title===`Sound Gardens - Painel Administrativo`){
         event.attractions.map(atraction => atracoes.value += atraction + ', ')
         descricao.value=event.description
         let date = new Date(event.scheduled)
-        data.value=date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()+' '+date.getHours()+`:`+date.getMinutes()
+        data.value=String(date.getDate()).padStart(2, '0') + '/'+ String(date.getMonth()+1).padStart(2, '0')+'/'+ String(date.getFullYear())+' '+String(date.getHours()).padStart(2, '0')+`:`+String(date.getMinutes()).padStart(2, '0')
         lotacao.value=event.number_tickets
 
         eventForm.addEventListener(`submit`,async(e)=>{
@@ -325,10 +325,10 @@ if(!postId && title===`Sound Gardens - Painel Administrativo`){
     
         nome.value=event.name
         banner.value = event.poster
-        event.attractions.map(atraction => atracoes.value += atraction + ', ')
+        event.attractions.map(atraction => atracoes.value += atraction + ',')
         descricao.value=event.description
         let date = new Date(event.scheduled)
-        data.value=date.getDate() + '/'+ (date.getMonth()+1)+'/'+ date.getFullYear()+' '+date.getHours()+`:`+date.getMinutes()
+        data.value=String(date.getDate()).padStart(2, '0') + '/'+ String(date.getMonth()+1).padStart(2, '0')+'/'+ String(date.getFullYear())+' '+String(date.getHours()).padStart(2, '0')+`:`+String(date.getMinutes()).padStart(2, '0')
         lotacao.value=event.number_tickets
     
         eventForm.addEventListener(`submit`,async(e)=>{
