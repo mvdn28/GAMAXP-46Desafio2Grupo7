@@ -12,7 +12,8 @@ const path = window.location.pathname
 const getEvents = async() => {
     const response = await fetch(urlEvent)
 
-    const events = await response.json()    
+    const events = await response.json()
+    console.log(events)    
 
     let tabelaEvents = document.querySelector("#tabela-eventos")
     
@@ -173,9 +174,9 @@ const deleteBooking = async(id) => {
 
 
 
-if(!postId && path==`/admin.html`){
+if(!postId && path.includes(`https://mvdn28.github.io/GAMAXP-46Desafio2Grupo7/admin.html`)){
     getEvents()
-}else if(path === `/cadastro-evento.html`) {
+}else if(path.includes(`/cadastro-evento.html`)) {
     const cadastrar = async() => {
         const eventForm = document.querySelector(`#novo-evento-form`)
         const nome = document.querySelector(`#nome`)
