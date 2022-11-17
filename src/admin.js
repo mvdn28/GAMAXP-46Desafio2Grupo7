@@ -174,7 +174,7 @@ const deleteBooking = async(id) => {
 
 
 
-if(!postId && path.includes(`https://mvdn28.github.io/GAMAXP-46Desafio2Grupo7/admin.html`)){
+if(!postId && path.includes(`/admin.html`)){
     getEvents()
 }else if(path.includes(`/cadastro-evento.html`)) {
     const cadastrar = async() => {
