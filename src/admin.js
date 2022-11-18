@@ -72,15 +72,18 @@ const getEvents = async() => {
 }
 
 const getBooking = async(eventId) => {
+    const responseEvent = await fetch(`${urlEvent}/${eventId}`)
+    const event = await responseEvent.json()
     const response = await fetch(`${urlBooking}/event/${eventId}`)
 
     const bookings = await response.json()
 
     let header = document.querySelector(`#reserva`)
-    header.innerText=`Gerenciamento de reservas - ${bookings[0].event.name}`
+    header.innerText=`Gerenciamento de reservas - ${event.name}`
     let tabelaEvents = document.querySelector("#tabela-reservas")
     
-    bookings.map((book,index)=> {
+    
+    if(bookings.length!=0){bookings.map((book,index)=> {
 
         let tr = document.createElement("tr")
         let th = document.createElement("th")
@@ -115,7 +118,11 @@ const getBooking = async(eventId) => {
 
         tabelaEvents.appendChild(tr)
 
-    })
+    })}else{
+        let span = document.createElement('span')
+        span.innerText='Sem reservas'
+        tabelaEvents.appendChild(span)
+    }
 
 
 }

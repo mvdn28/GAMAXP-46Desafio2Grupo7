@@ -151,8 +151,23 @@ if(title==`Sound Garden`){
                 }
                 newReserva=JSON.stringify(newReserva)
                 await postBooking(newReserva)
+
+                const formDiv = document.getElementById("modal-corpo")
+                const form = formDiv.getElementsByTagName("form")[0]
+            
+                const newDiv = document.createElement("div")
+                newDiv.classList.add("alert", "alert-success")
+                newDiv.setAttribute("role","alert")
+                newDiv.innerText=`Sucesso ao criar reserva`
+            
+                form.insertBefore(newDiv,form.firstChild)
                 nome.value=''
                 email.value=''
+            
+                setTimeout(() => {
+                    newDiv.remove()
+                    
+                },5000)
         })}
 
         for(btn of abrirBtn){
@@ -194,8 +209,22 @@ if(title==`Sound Garden`){
                 }
                 newReserva=JSON.stringify(newReserva)
                 await postBooking(newReserva)
+                const formDiv = document.getElementById("modal-corpo")
+                const form = formDiv.getElementsByTagName("form")[0]
+            
+                const newDiv = document.createElement("div")
+                newDiv.classList.add("alert", "alert-success")
+                newDiv.setAttribute("role","alert")
+                newDiv.innerText=`Sucesso ao criar reserva`
+            
+                form.insertBefore(newDiv,form.firstChild)
                 nome.value=''
                 email.value=''
+            
+                setTimeout(() => {
+                    newDiv.remove()
+                    
+                },5000)
         })}
 
         for(btn of abrirBtn){
