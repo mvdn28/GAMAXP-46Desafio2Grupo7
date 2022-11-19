@@ -42,15 +42,15 @@ const getEvents = async() => {
         link1.setAttribute("id", `reserva-${event._id}`)
         link1.setAttribute("data-toggle",`modal`)
         link1.setAttribute(`data-target`, `#reservaModal`)
-        link1.setAttribute(`href`,`/reservas.html?id=${event._id}&func=res`)
+        link1.setAttribute(`href`,`/GAMAXP-46Desafio2Grupo7/reservas.html?id=${event._id}&func=res`)
         link1.setAttribute(`type`,`button`)
         link1.innerText="ver reservas"
         link2.classList.add("btn","btn-secondary")
-        link2.setAttribute("href", `/editar-evento.html?id=${event._id}&func=edit`)
+        link2.setAttribute("href", `/GAMAXP-46Desafio2Grupo7/editar-evento.html?id=${event._id}&func=edit`)
         link2.innerText="editar"
         link3.classList.add("btn","btn-danger")
         link3.setAttribute("id", `${event._id}`)
-        link3.setAttribute("href", `/excluir-evento.html?id=${event._id}&func=delete`)
+        link3.setAttribute("href", `/GAMAXP-46Desafio2Grupo7/excluir-evento.html?id=${event._id}&func=delete`)
         link3.innerText="excluir"
 
         tr.appendChild(th)
