@@ -15,6 +15,10 @@ export class BookingService extends Booking implements getAll, getOne, create, e
         let response = await fetch(`${this.url}/${id}`);
         return await response.json();
     }
+    async getOneById(id:string): Promise<void> {
+        let response = await fetch(`${this.url}/event/${id}`);
+        return await response.json();
+    }
     async create(): Promise<void> {
         let booking = {
             owner_name:this.owner_name,
@@ -59,3 +63,4 @@ export class BookingService extends Booking implements getAll, getOne, create, e
         return await response.json()
     }
 }
+module.exports = BookingService

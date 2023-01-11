@@ -1,5 +1,4 @@
 export class Event{
-    public url:string;
     public name:string;
     public attractions:Array<string>;
     public description:string;
@@ -9,7 +8,6 @@ export class Event{
 
 
     constructor(url:string, name:string, attractions:Array<string>, description:string, scheduled:Date, number_tickets:number,poster:string){
-        this.url="https://xp41-soundgarden-api.herokuapp.com/events";
         this.name = name;
         this.attractions=attractions;
         this.description=description;

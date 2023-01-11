@@ -8,7 +8,7 @@ export class Booking{
 
 
     constructor(url:string, owner_name:string, owner_email:string,number_tickets:number,event_id:string){
-        this.url="https://xp41-soundgarden-api.herokuapp.com/bookings";
+        this.url="http://localhost:3000/bookings";
         this.owner_name = owner_name;
         this.owner_email=owner_email;
         this.number_tickets=number_tickets;
