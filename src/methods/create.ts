@@ -1,3 +1,3 @@
 export interface create{
-    create():void
+    create(thing:any):void
 }

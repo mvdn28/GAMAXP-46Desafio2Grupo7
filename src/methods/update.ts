@@ -1,3 +1,3 @@
 export interface update{
-    update(id:string):void
+    update(id:string, thing:any):void
 }

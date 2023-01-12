@@ -1,4 +1,5 @@
 export class Event{
+    public id:number;
     public name:string;
     public attractions:Array<string>;
     public description:string;
@@ -7,7 +8,8 @@ export class Event{
     public poster:string;
 
 
-    constructor(url:string, name:string, attractions:Array<string>, description:string, scheduled:Date, number_tickets:number,poster:string){
+    constructor(url:string,id:number, name:string, attractions:Array<string>, description:string, scheduled:Date, number_tickets:number,poster:string){
+        this.id=id;
         this.name = name;
         this.attractions=attractions;
         this.description=description;

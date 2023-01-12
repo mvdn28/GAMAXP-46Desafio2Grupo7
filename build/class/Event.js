@@ -1,8 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Event = void 0;
-class Event {
-    constructor(url, name, attractions, description, scheduled, number_tickets, poster) {
+export class Event {
+    constructor(url, id, name, attractions, description, scheduled, number_tickets, poster) {
+        this.id = id;
         this.name = name;
         this.attractions = attractions;
         this.description = description;
@@ -11,4 +9,3 @@ class Event {
         this.poster = "link da imagem";
     }
 }
-exports.Event = Event;

@@ -5,7 +5,8 @@ import { exclude } from "../methods/exclude";
 import { update } from "../methods/update";
 import { Booking } from "../class/Booking";
 
-export class BookingService extends Booking implements getAll, getOne, create, exclude, update{
+export class BookingService implements getAll, getOne, create, exclude, update{
+    private url = "http://localhost:3000/bookings"
 
     async getAll(): Promise<void> {
         let response = await fetch(this.url)
@@ -19,13 +20,7 @@ export class BookingService extends Booking implements getAll, getOne, create, e
         let response = await fetch(`${this.url}/event/${id}`);
         return await response.json();
     }
-    async create(): Promise<void> {
-        let booking = {
-            owner_name:this.owner_name,
-            owner_email:this.owner_email,
-            number_tickets:1,
-            event_id:localStorage.getItem(`id`)
-        }
+    async create(booking:Booking): Promise<void> {
         let response = await fetch(`${this.url}`,{
             method:"POST",
             body:JSON.stringify(booking),
@@ -45,13 +40,7 @@ export class BookingService extends Booking implements getAll, getOne, create, e
         })
         return await response.json()
     }
-    async update(id: string): Promise<void> {
-        let booking = {
-            owner_name:this.owner_name,
-            owner_email:this.owner_email,
-            number_tickets:1,
-            event_id:localStorage.getItem(`id`)
-        }
+    async update(id: string, booking:Booking): Promise<void> {
         let response = await fetch(`${this.url}/${id}`,{
             method:"PUT",
             body:JSON.stringify(booking),
@@ -63,4 +52,3 @@ export class BookingService extends Booking implements getAll, getOne, create, e
         return await response.json()
     }
 }
-module.exports = BookingService
